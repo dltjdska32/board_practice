@@ -56,4 +56,10 @@ public class MemberRepository {
         return em.createQuery("select m from Member m", Member.class)
                 .getResultList();
     }
+
+
+    // email을 통해 데이터베이스에서 일치하는 데이터를가져와 멤버클래스와 매핑
+    public Member findByEmail(String email) {
+        return em.find(Member.class, email);
+    }
 }

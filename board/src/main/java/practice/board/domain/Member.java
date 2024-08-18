@@ -1,13 +1,10 @@
 package practice.board.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
-@Data
+@Getter
 @Builder
 @AllArgsConstructor //모든 컬럼 생성자 생성
 @NoArgsConstructor // 기본 생성자
@@ -21,9 +18,13 @@ public class Member {
     @Column(nullable = false, unique = true) //null값 허용 x , 중복값 x
     private String email;
 
-
+    @Column(nullable = false)
     private String username;
 
-    @Column
+    @Column(nullable = false)
     private String password;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private Role role;
 }

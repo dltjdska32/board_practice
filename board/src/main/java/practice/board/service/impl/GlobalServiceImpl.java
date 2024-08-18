@@ -7,13 +7,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import practice.board.domain.Member;
+import practice.board.domain.Role;
 import practice.board.dto.MemberResponseDTO;
 import practice.board.dto.MemberSaveRequestDTO;
 import practice.board.repository.MemberRepository;
-import practice.board.service.MemberService;
+import practice.board.service.GlobalService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,7 +25,7 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class MemberServiceImpl implements MemberService {
+public class GlobalServiceImpl implements GlobalService {
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
 
@@ -36,6 +38,7 @@ public class MemberServiceImpl implements MemberService {
                 .email(memberSaveRequestDTO.getEmail())
                 .username(memberSaveRequestDTO.getUsername())
                 .password(memberSaveRequestDTO.getPassword())
+                .role(Role.ROLE_USER)
                 .build();
 
         log.info( member.getUsername());
@@ -61,6 +64,15 @@ public class MemberServiceImpl implements MemberService {
         }
 
         return validatorResult;
+    }
+
+
+    @Override
+    public void messageHandling(Errors errors, Model model) {
+        Map<String, String> validatorResult = validateHandling(errors);
+        for (String key : validatorResult.keySet()) {
+            model.addAttribute(key, validatorResult.get(key));
+        }
     }
 
     @Override
